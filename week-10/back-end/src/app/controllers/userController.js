@@ -2,23 +2,45 @@ import api from '../../services/api'
 import Dev from '../models/Dev'
 
 const index = async (req, res) => {
-  return res.json({ message: 'index method' })
+  const user = await Dev.find({})
+
+  return res.json({ user })
 }
 
 const show = async (req, res) => {
-  const { id } = req.params
-  return res.json({ message: 'show method', id })
+  const { login } = req.params
+  const user = await Dev.findOne({ github_username: login })
+
+  return res.json({ user })
 }
 
 const store = async (req, res) => {
-  const body = req.body
-  const user = await Dev.findOne({ name: 'woods' })
+  const { githubUsername, techs = [], latitude, longitude } = req.body
 
-  if (user) {
-    user.remove()
+  const { data: response } = await api.get(`/users/${githubUsername}`)
+
+  const { login, name = login, avatar_url, bio } = response
+
+  const user = await Dev.findOne({ github_username: login })
+
+  if (!user) {
+    const location = {
+      type: 'Point',
+      coordinates: [longitude, latitude],
+    }
+    const newUser = await Dev.create({
+      github_username: login,
+      name,
+      bio,
+      avatar_url,
+      techs: techs.split(',').map(el => el.trim()),
+      location,
+    })
+
+    return res.json(newUser)
   }
 
-  return res.json({ message: 'store method', body })
+  return res.status('401').json({ error: 'user already exists' })
 }
 
 const update = async (req, res) => {
