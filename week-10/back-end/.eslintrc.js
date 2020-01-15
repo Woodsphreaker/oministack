@@ -4,8 +4,10 @@ module.exports = {
     node: true
   },
   extends: [
-    'standard'
+    'standard',
+    'prettier'
   ],
+  plugins: ['prettier'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'
@@ -15,5 +17,10 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    "prettier/prettier": "error",
+    "quotes": ["error", "single"],
+    "object-curly-spacing": [2, "always"],
+    "semi": [2, "never"],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
   }
 }
