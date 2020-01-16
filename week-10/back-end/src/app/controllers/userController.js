@@ -1,5 +1,6 @@
 import api from '../../services/api'
 import Dev from '../models/Dev'
+import * as Yup from 'yup'
 
 // utils
 import parseStringToArray from '../../utils/parseStringToArray'
@@ -7,7 +8,7 @@ import parseStringToArray from '../../utils/parseStringToArray'
 const index = async (req, res) => {
   const user = await Dev.find()
 
-  return res.json({ user })
+  return res.json(user)
 }
 
 const show = async (req, res) => {
@@ -23,6 +24,17 @@ const show = async (req, res) => {
 
 const store = async (req, res) => {
   const { githubUsername, techs = [], latitude, longitude } = req.body
+
+  const schema = Yup.object().shape({
+    githubUsername: Yup.string().required(),
+    techs: Yup.string().required(),
+    latitude: Yup.string().required(),
+    longitude: Yup.string().required(),
+  })
+
+  if (!(await schema.isValid(req.body))) {
+    return res.status(400).json({ error: 'validations failed' })
+  }
 
   const { data: response } = await api.get(`/users/${githubUsername}`)
 
