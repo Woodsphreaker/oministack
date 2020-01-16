@@ -1,6 +1,9 @@
 import api from '../../services/api'
 import Dev from '../models/Dev'
 
+// utils
+import parseStringToArray from '../../utils/parseStringToArray'
+
 const index = async (req, res) => {
   const user = await Dev.find({})
 
@@ -11,7 +14,11 @@ const show = async (req, res) => {
   const { login } = req.params
   const user = await Dev.findOne({ github_username: login })
 
-  return res.json({ user })
+  if (!user) {
+    return res.status(400).json({ error: 'User not found' })
+  }
+
+  return res.json(user)
 }
 
 const store = async (req, res) => {
@@ -33,7 +40,7 @@ const store = async (req, res) => {
       name,
       bio,
       avatar_url,
-      techs: techs.split(',').map(el => el.trim()),
+      techs: parseStringToArray(techs),
       location,
     })
 
@@ -44,11 +51,43 @@ const store = async (req, res) => {
 }
 
 const update = async (req, res) => {
+  const { login } = req.params
+  const { name, bio, avatar_url, techs = [], latitude, longitude } = req.body
+
+  const user = await Dev.findOne({ github_username: login })
+
+  if (!user) {
+    return res.status(400).json({ error: 'user not found' })
+  }
+
+  const location = {
+    type: 'Point',
+    coordinates: [longitude, latitude],
+  }
+
+  await user.updateOne({
+    name,
+    bio,
+    avatar_url,
+    techs: parseStringToArray(techs),
+    location,
+  })
+
   return res.json({ message: 'update method' })
 }
 
 const destroy = async (req, res) => {
-  return res.json({ message: 'destroy method' })
+  const { login } = req.params
+
+  const user = await Dev.findOne({ github_username: login })
+
+  if (!user) {
+    return res.status(400).json({ error: 'User not found' })
+  }
+
+  await user.remove()
+
+  return res.json({ message: 'user removed sucessifully' })
 }
 
 export default { index, show, store, update, destroy }
