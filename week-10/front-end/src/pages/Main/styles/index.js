@@ -8,6 +8,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+  }
 `
 
 const Sidebar = styled.aside`
@@ -26,6 +30,10 @@ const Sidebar = styled.aside`
 
   form {
     margin-top: 30px;
+  }
+
+  @media (max-width: 1000px) {
+    width: 100%;
   }
 `
 
@@ -80,6 +88,11 @@ const SubmitButton = styled.button`
 const ListContainer = styled.div`
   flex: 1;
   margin-left: 30px;
+
+  @media (max-width: 1000px) {
+    margin-left: 0;
+    margin-top: 30px;
+  }
 `
 
 const List = styled.ul`
@@ -87,6 +100,10 @@ const List = styled.ul`
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   list-style: none;
+
+  @media (max-width: 650px) {
+    grid-template-columns: 1fr;
+  }
 
   li {
     background: #fff;
