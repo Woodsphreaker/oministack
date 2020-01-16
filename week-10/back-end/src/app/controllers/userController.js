@@ -5,7 +5,7 @@ import Dev from '../models/Dev'
 import parseStringToArray from '../../utils/parseStringToArray'
 
 const index = async (req, res) => {
-  const user = await Dev.find({})
+  const user = await Dev.find()
 
   return res.json({ user })
 }
