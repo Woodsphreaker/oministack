@@ -68,7 +68,9 @@ const InputGroup = styled.div`
     margin-top: 0;
   }
 `
-const SubmitButton = styled.button`
+const SubmitButton = styled.button.attrs(() => ({
+  type: 'submit',
+}))`
   width: 100%;
   border: 0;
   margin-top: 30px;

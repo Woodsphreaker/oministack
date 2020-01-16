@@ -1,4 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import api from '../../services/api'
+
+import parseStringToArray from '../../utils/parseStringToArray'
 
 // Styled Components
 import {
@@ -13,6 +16,64 @@ import {
 } from './styles'
 
 const Main = () => {
+  const [devs, setDevs] = useState([])
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
+  const [githubUsername, setGithuUserName] = useState('')
+  const [techs, setTechs] = useState('')
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords
+        setLatitude(latitude)
+        setLongitude(longitude)
+      },
+      err => console.log(err)
+    )
+  }, [])
+
+  useEffect(() => {
+    getDevs()
+  }, [])
+
+  const getDevs = async () => {
+    try {
+      const { data } = await api.get('/user')
+      setDevs(data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault()
+    addDev()
+  }
+
+  const addDev = async () => {
+    try {
+      const { data } = await api.post('/user', {
+        githubUsername,
+        techs,
+        latitude,
+        longitude,
+      })
+      alert('cadastrado com sucesso')
+      setDevs([...devs, data])
+    } catch (err) {
+      const {
+        response: {
+          data: { error },
+        },
+      } = err
+      alert(error)
+    }
+
+    setGithuUserName('')
+    setTechs('')
+  }
+
   return (
     <Container>
       <Sidebar>
@@ -20,47 +81,64 @@ const Main = () => {
         <form>
           <InputBlock>
             <label htmlFor="github_username">Usuário do Github</label>
-            <input name="github_username" id="username_github" required></input>
+            <input
+              name="github_username"
+              id="username_github"
+              value={githubUsername}
+              onChange={e => setGithuUserName(e.target.value)}
+              required
+            ></input>
           </InputBlock>
 
           <InputBlock>
             <label htmlFor="techs">Tecnologias</label>
-            <input name="techs" id="techs" required></input>
+            <input
+              name="techs"
+              id="techs"
+              value={techs}
+              onChange={e => setTechs(e.target.value)}
+              required
+            ></input>
           </InputBlock>
 
           <InputGroup>
             <InputBlock>
               <label htmlFor="latitude">Latitude</label>
-              <input name="latitude" id="latitude" required></input>
+              <input
+                name="latitude"
+                id="latitude"
+                value={latitude}
+                required
+                onChange={e => setLatitude(e.target.value)}
+              ></input>
             </InputBlock>
 
             <InputBlock>
               <label htmlFor="longitude">Longitude</label>
-              <input name="longitude" id="longitude" required></input>
+              <input
+                name="longitude"
+                value={longitude}
+                id="longitude"
+                required
+                onChange={e => setLongitude(e.target.value)}
+              ></input>
             </InputBlock>
           </InputGroup>
-
-          <SubmitButton>Salvar</SubmitButton>
+          <SubmitButton onClick={handleSubmit}>Salvar</SubmitButton>
         </form>
       </Sidebar>
       <ListContainer>
         <List>
-          {[...Array(5).keys()].map(el => (
-            <li key={el}>
+          {devs.map(dev => (
+            <li key={dev._id}>
               <header>
-                <img
-                  src="https://avatars1.githubusercontent.com/u/22459141?s=460&v=4"
-                  alt="Woods"
-                />
+                <img src={dev.avatar_url} alt={dev.login} />
                 <UserInfo>
-                  <strong>Carlo Enrico</strong>
-                  <span>ReactJS, React Native, NodeJS</span>
+                  <strong>{dev.name}</strong>
+                  <span>{dev.techs.toString()}</span>
                 </UserInfo>
               </header>
-              <p>
-                Almost full time developer, everlasting student and passionate
-                about web development and the entire ecosystem
-              </p>
+              <p>{dev.bio}</p>
               <a href="https://github.com/Woodsphreaker">Acessar Perfil</a>
             </li>
           ))}
