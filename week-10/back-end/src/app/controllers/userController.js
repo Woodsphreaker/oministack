@@ -97,9 +97,9 @@ const destroy = async (req, res) => {
     return res.status(400).json({ error: 'User not found' })
   }
 
-  await user.remove()
+  const { github_username } = await user.remove()
 
-  return res.json({ message: 'user removed sucessifully' })
+  return res.json({ github_username })
 }
 
 export default { index, show, store, update, destroy }
