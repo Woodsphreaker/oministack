@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../services/api'
 
-import parseStringToArray from '../../utils/parseStringToArray'
+// Icons
+// import { MdDeleteForever } from 'react-icons/md'
 
 // Styled Components
 import {
@@ -12,8 +13,13 @@ import {
   InputBlock,
   InputGroup,
   SubmitButton,
-  UserInfo,
+  // UserInfo,
+  // RowContainer,
+  // RemoveProfile,
 } from './styles'
+
+// Components
+import DevItem from '../../components/DevItem'
 
 const Main = () => {
   const [devs, setDevs] = useState([])
@@ -59,7 +65,7 @@ const Main = () => {
         latitude,
         longitude,
       })
-      alert('cadastrado com sucesso')
+      // alert('cadastrado com sucesso')
       setDevs([...devs, data])
     } catch (err) {
       const {
@@ -72,6 +78,20 @@ const Main = () => {
 
     setGithuUserName('')
     setTechs('')
+  }
+
+  const removeDev = async login => {
+    try {
+      const { data } = await api.delete(`/user/${login}`)
+      console.log(data)
+      setDevs(
+        devs.filter(
+          ({ github_username }) => github_username !== data.github_username
+        )
+      )
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -130,17 +150,7 @@ const Main = () => {
       <ListContainer>
         <List>
           {devs.map(dev => (
-            <li key={dev._id}>
-              <header>
-                <img src={dev.avatar_url} alt={dev.login} />
-                <UserInfo>
-                  <strong>{dev.name}</strong>
-                  <span>{dev.techs.toString()}</span>
-                </UserInfo>
-              </header>
-              <p>{dev.bio}</p>
-              <a href="https://github.com/Woodsphreaker">Acessar Perfil</a>
-            </li>
+            <DevItem key={dev._id} dev={dev} removeDev={removeDev} />
           ))}
         </List>
       </ListContainer>

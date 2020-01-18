@@ -112,6 +112,8 @@ const List = styled.ul`
     box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.2);
     border-radius: 2px;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 
     header {
       display: flex;
@@ -132,17 +134,33 @@ const List = styled.ul`
       margin: 10px;
     }
 
-    > a {
-      color: #8e4dff;
-      font-size: 14px;
+    a {
+      flex: 1;
+      margin-top: auto;
+      background: #7159c1;
+      border-radius: 2px;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
       text-decoration: none;
-      margin: 10px;
+      text-align: center;
+      transition: background 0.5s;
 
       &:hover {
-        color: #5a26a6;
+        background: #6931ca;
       }
     }
   }
+`
+
+const RemoveProfile = styled.button`
+  border: none;
+  background: #990000;
+  border-radius: 2px;
+  padding: 10px;
+  color: #fff;
+  margin-left: 5px;
 `
 
 const UserInfo = styled.div`
@@ -161,6 +179,12 @@ const UserInfo = styled.div`
   }
 `
 
+const RowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: auto;
+`
+
 export {
   Container,
   Sidebar,
@@ -170,4 +194,6 @@ export {
   InputGroup,
   SubmitButton,
   UserInfo,
+  RowContainer,
+  RemoveProfile,
 }
