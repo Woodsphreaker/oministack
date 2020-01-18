@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../services/api'
 
-// Icons
-// import { MdDeleteForever } from 'react-icons/md'
-
 // Styled Components
 import {
   Container,
@@ -13,9 +10,6 @@ import {
   InputBlock,
   InputGroup,
   SubmitButton,
-  // UserInfo,
-  // RowContainer,
-  // RemoveProfile,
 } from './styles'
 
 // Components
@@ -65,7 +59,6 @@ const Main = () => {
         latitude,
         longitude,
       })
-      // alert('cadastrado com sucesso')
       setDevs([...devs, data])
     } catch (err) {
       const {
@@ -83,7 +76,6 @@ const Main = () => {
   const removeDev = async login => {
     try {
       const { data } = await api.delete(`/user/${login}`)
-      console.log(data)
       setDevs(
         devs.filter(
           ({ github_username }) => github_username !== data.github_username
