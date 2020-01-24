@@ -1,12 +1,19 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 
-const Profile = props => {
-  return (
-    <View>
-      <Text>{props.navigation.getParam('name')}</Text>
-    </View>
-  )
+import { Browser } from './styles'
+
+// Proptypes
+import propTypes from 'prop-types'
+
+const Profile = ({ navigation }) => {
+  const user = navigation.getParam('user')
+  return <Browser source={{ uri: `https://github.com/${user}` }} />
+}
+
+Profile.propTypes = {
+  navigation: propTypes.shape({
+    getParam: propTypes.func.isRequired,
+  }).isRequired,
 }
 
 export default Profile

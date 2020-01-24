@@ -12,6 +12,9 @@ import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location'
 // Api
 import api from '../../services/api'
 
+// Icons
+import { MaterialIcons } from '@expo/vector-icons'
+
 // Styled Components
 import {
   Map,
@@ -20,6 +23,9 @@ import {
   DevName,
   DevBio,
   DevTechs,
+  Form,
+  Input,
+  SubmitButton,
 } from './styles'
 
 const Main = props => {
@@ -61,34 +67,43 @@ const Main = props => {
     return false
   }
 
-  const handleNavigation = () => {
+  const handleNavigation = user => {
     const { navigation } = props
-
-    navigation.navigate('Profile', { name: 'woods' })
+    navigation.navigate('Profile', { user })
   }
 
-  return (
-    <Map initialRegion={currentRegion}>
-      {devs.map(dev => (
-        <Marker
-          key={dev._id}
-          coordinate={{ latitude: -23.5427793, longitude: -46.5745167 }}>
-          <Avatar
-            source={{
-              uri: `${dev.avatar_url}`,
-            }}
-          />
+  const handleSubmit = () => {}
 
-          <Callout onPress={handleNavigation}>
-            <DevInfoContainer>
-              <DevName>{dev.name}</DevName>
-              <DevBio>{dev.bio}</DevBio>
-              <DevTechs></DevTechs>
-            </DevInfoContainer>
-          </Callout>
-        </Marker>
-      ))}
-    </Map>
+  return (
+    <>
+      <Map initialRegion={currentRegion}>
+        {devs.map(dev => (
+          <Marker
+            key={dev._id}
+            coordinate={{ latitude: -23.5427793, longitude: -46.5745167 }}>
+            <Avatar
+              source={{
+                uri: `${dev.avatar_url}`,
+              }}
+            />
+
+            <Callout onPress={() => handleNavigation(dev.github_username)}>
+              <DevInfoContainer>
+                <DevName>{dev.name}</DevName>
+                <DevBio>{dev.bio}</DevBio>
+                <DevTechs></DevTechs>
+              </DevInfoContainer>
+            </Callout>
+          </Marker>
+        ))}
+      </Map>
+      <Form>
+        <Input placeholder="Buscar devs por techs ..."></Input>
+        <SubmitButton onPress={handleSubmit}>
+          <MaterialIcons name="my-location" size={20} color="#fff" />
+        </SubmitButton>
+      </Form>
+    </>
   )
 }
 
