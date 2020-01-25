@@ -15,6 +15,9 @@ import api from '../../services/api'
 // Icons
 import { MaterialIcons } from '@expo/vector-icons'
 
+// Utils
+import getCoords from '../../../utils/getCoords'
+
 // Styled Components
 import {
   Map,
@@ -31,14 +34,15 @@ import {
 const Main = props => {
   const [currentRegion, setCurrentRegion] = useState(null)
   const [devs, setDevs] = useState([])
+  const [searchedTechs, setSearchedTechs] = useState('')
 
   useEffect(() => {
     loadInitialPosition()
   }, [])
 
-  useEffect(() => {
-    getDevs()
-  }, [])
+  // useEffect(() => {
+  //   getDevs()
+  // }, [])
 
   const loadInitialPosition = async () => {
     const { granted } = await requestPermissionsAsync()
@@ -49,7 +53,7 @@ const Main = props => {
       })
 
       const { latitude, longitude } = coords
-      setCurrentRegion({
+      setRegion({
         latitude,
         longitude,
         latitudeDelta: 0.04,
@@ -58,13 +62,36 @@ const Main = props => {
     }
   }
 
-  const getDevs = async () => {
-    const { data } = await api.get('/user')
-    setDevs(data)
+  const setRegion = coords => {
+    const { latitude, longitude, latitudeDelta, longitudeDelta } = coords
+
+    setCurrentRegion({
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    })
   }
 
-  if (!currentRegion) {
-    return false
+  const getDevs = async () => {
+    try {
+      const { latitude, longitude } = currentRegion
+      const { data } = await api.get('/search', {
+        params: {
+          latitude,
+          longitude,
+          techs: searchedTechs,
+        },
+      })
+      setDevs(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleRegionChange = coords => {
+    setRegion(coords)
+    getDevs()
   }
 
   const handleNavigation = user => {
@@ -72,15 +99,21 @@ const Main = props => {
     navigation.navigate('Profile', { user })
   }
 
-  const handleSubmit = () => {}
+  const handleSubmit = () => {
+    getDevs()
+  }
+
+  if (!currentRegion) {
+    return false
+  }
 
   return (
     <>
-      <Map initialRegion={currentRegion}>
+      <Map
+        onRegionChangeComplete={handleRegionChange}
+        initialRegion={currentRegion}>
         {devs.map(dev => (
-          <Marker
-            key={dev._id}
-            coordinate={{ latitude: -23.5427793, longitude: -46.5745167 }}>
+          <Marker key={dev._id} coordinate={getCoords(dev)}>
             <Avatar
               source={{
                 uri: `${dev.avatar_url}`,
@@ -98,7 +131,9 @@ const Main = props => {
         ))}
       </Map>
       <Form>
-        <Input placeholder="Buscar devs por techs ..."></Input>
+        <Input
+          onChangeText={setSearchedTechs}
+          placeholder="Buscar devs por techs ..."></Input>
         <SubmitButton onPress={handleSubmit}>
           <MaterialIcons name="my-location" size={20} color="#fff" />
         </SubmitButton>
