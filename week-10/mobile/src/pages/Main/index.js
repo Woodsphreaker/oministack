@@ -18,6 +18,9 @@ import { MaterialIcons } from '@expo/vector-icons'
 // Utils
 import getCoords from '../../../utils/getCoords'
 
+// Websocket
+import { connect, disconnect } from '../../services/socket'
+
 // Styled Components
 import {
   Map,
@@ -40,9 +43,15 @@ const Main = props => {
     loadInitialPosition()
   }, [])
 
-  // useEffect(() => {
-  //   getDevs()
-  // }, [])
+  const connectToWebSocket = () => {
+    const { latitude, longitude } = currentRegion
+
+    connect({
+      latitude,
+      longitude,
+      techs: searchedTechs,
+    })
+  }
 
   const loadInitialPosition = async () => {
     const { granted } = await requestPermissionsAsync()
@@ -84,6 +93,7 @@ const Main = props => {
         },
       })
       setDevs(data)
+      connectToWebSocket()
     } catch (error) {
       console.log(error)
     }
@@ -91,7 +101,7 @@ const Main = props => {
 
   const handleRegionChange = coords => {
     setRegion(coords)
-    getDevs()
+    // getDevs()
   }
 
   const handleNavigation = user => {
