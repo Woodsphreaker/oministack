@@ -1,6 +1,7 @@
 import api from '../../services/api'
 import Dev from '../models/Dev'
 import * as Yup from 'yup'
+import { findConnections } from '../../lib/socket'
 
 // utils
 import parseStringToArray from '../../utils/parseStringToArray'
@@ -55,6 +56,13 @@ const store = async (req, res) => {
       techs: parseStringToArray(techs),
       location,
     })
+
+    const sendSocketMessageTo = findConnections(
+      { latitude, longitude },
+      parseStringToArray(techs)
+    )
+
+    console.log(sendSocketMessageTo)
 
     return res.json(newUser)
   }
