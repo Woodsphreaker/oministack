@@ -5,9 +5,15 @@ import calculateDistance from '../utils/calculateDistance'
 // store the connection on object (best in some database)
 const connections = []
 
+const localData = {}
+
 const creatSocketServer = http => {
   const io = socket(http)
+  localData.io = io
+  createSocketConnection(io)
+}
 
+const createSocketConnection = io => {
   io.on('connection', socket => {
     const {
       id,
@@ -15,7 +21,6 @@ const creatSocketServer = http => {
     } = socket
 
     const { latitude, longitude, techs } = query
-
     connections.push({
       id,
       coordinates: {
@@ -24,7 +29,13 @@ const creatSocketServer = http => {
       },
       techs: parseStringToArray(techs),
     })
+
+    createSocketListeners(socket)
   })
+}
+
+const createSocketListeners = socket => {
+  socket.on('testConn', text => console.log(text))
 }
 
 const findConnections = (coordinates, techs) => {
@@ -37,7 +48,10 @@ const findConnections = (coordinates, techs) => {
 }
 
 const sendMessage = (to, message, data) => {
-  // refatorar acesso ao io
+  const { io } = localData
+  for (const connection of to) {
+    io.to(connection.id).emit(message, data)
+  }
 }
 
-export { creatSocketServer, findConnections }
+export { creatSocketServer, findConnections, sendMessage }

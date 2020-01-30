@@ -1,7 +1,7 @@
 import api from '../../services/api'
 import Dev from '../models/Dev'
 import * as Yup from 'yup'
-import { findConnections } from '../../lib/socket'
+import { findConnections, sendMessage } from '../../lib/socket'
 
 // utils
 import parseStringToArray from '../../utils/parseStringToArray'
@@ -62,7 +62,7 @@ const store = async (req, res) => {
       parseStringToArray(techs)
     )
 
-    console.log(sendSocketMessageTo)
+    sendMessage(sendSocketMessageTo, 'newDev', newUser)
 
     return res.json(newUser)
   }
