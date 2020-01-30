@@ -13,8 +13,18 @@ const connect = ({ latitude, longitude, techs }) => {
   }
 
   socket.connect()
+  createListeners()
+}
 
-  socket.on('message', text => console.log(text))
+// refactor this function
+const subscribeNewDev = action => {
+  socket.on('newDev', dev => action(dev))
+}
+
+const createListeners = () => {
+  // socket.on('newDev', data => console.log(data))
+  // socket.on('message', text => console.log(text))
+  // socket.emit('testConn', { test: 123 })
 }
 
 const disconnect = () => {
@@ -22,4 +32,4 @@ const disconnect = () => {
     socket.disconnect()
   }
 }
-export { connect, disconnect }
+export { connect, disconnect, subscribeNewDev }

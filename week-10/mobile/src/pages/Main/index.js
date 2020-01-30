@@ -19,7 +19,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import getCoords from '../../../utils/getCoords'
 
 // Websocket
-import { connect, disconnect } from '../../services/socket'
+import { connect, disconnect, subscribeNewDev } from '../../services/socket'
 
 // Styled Components
 import {
@@ -43,9 +43,13 @@ const Main = props => {
     loadInitialPosition()
   }, [])
 
+  useEffect(() => {
+    subscribeNewDev(dev => setDevs([...devs, dev]))
+  }, [devs])
+
   const connectToWebSocket = () => {
     const { latitude, longitude } = currentRegion
-
+    disconnect()
     connect({
       latitude,
       longitude,
@@ -101,6 +105,7 @@ const Main = props => {
 
   const handleRegionChange = coords => {
     setRegion(coords)
+    disconnect()
     // getDevs()
   }
 
