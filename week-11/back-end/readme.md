@@ -1,7 +1,6 @@
 # Back End - Be Hero
 
-
-![Be Hero](https://raw.githubusercontent.com/Woodsphreaker/oministack/master/week-11/back-end/common-files/images/intro.jpg)
+<img src="https://raw.githubusercontent.com/Woodsphreaker/oministack/master/week-11/back-end/common-files/images/intro.jpg" alt="alt text" width="250" height="250">
 
 ## Licença
 
