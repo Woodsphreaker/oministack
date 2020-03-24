@@ -5,7 +5,8 @@ const show = async (req, res) => {
   return res.json({ message: 'show method' })
 }
 const store = async (req, res) => {
-  return res.json({ message: 'store method' })
+  const body = req.body
+  return res.json({ message: 'store method', body })
 }
 const update = async (req, res) => {
   return res.json({ message: 'update method' })
