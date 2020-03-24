@@ -1,7 +1,7 @@
 # Back End - Be Hero
 
 
-![TFS Default Project Structure Helper](https://raw.githubusercontent.com/Woodsphreaker/oministack/master/week-11/back-end/common-files/intro.jpg)
+![Be Hero](https://raw.githubusercontent.com/Woodsphreaker/oministack/master/week-11/back-end/common-files/images/intro.jpg)
 
 ## Licença
 
