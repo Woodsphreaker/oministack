@@ -1,14 +1,14 @@
 import { Router } from 'express'
 
 // Controllers
-import DefaultController from './app/controllers/defaultController'
+import OngController from './app/controllers/ongController'
 
 const router = Router()
 
-router.get('/', DefaultController.index)
-router.get('/:id', DefaultController.show)
-router.post('/', DefaultController.store)
-router.put('/:id', DefaultController.update)
-router.delete('/:id', DefaultController.destroy)
+router.get('/', OngController.index)
+router.get('/:id', OngController.show)
+router.post('/', OngController.store)
+router.put('/:id', OngController.update)
+router.delete('/:id', OngController.destroy)
 
 export default router

@@ -1,12 +1,19 @@
+// Mongodb
 import mongoose from 'mongoose'
 import mongoConfig from '../config/mongodb'
 
-const mongo = () =>
+// Knex
+// import knex from 'knex'
+// import knexConfig from '../../knexfile'
+
+const mongoDB = () =>
   mongoose.connect(mongoConfig.mongodb, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useFindAndModify: false,
   })
+
+// const knexDB = () => knex(knexConfig.development)
 
 const connect = (databases = []) => {
   if (!databases.length) {
@@ -18,4 +25,4 @@ const connect = (databases = []) => {
   }
 }
 
-export default connect([mongo])
+export default connect([mongoDB])
