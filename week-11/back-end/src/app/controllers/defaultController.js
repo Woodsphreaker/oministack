@@ -1,12 +1,28 @@
+import User from '../models/userModel'
+
 const index = async (req, res) => {
-  return res.json({ message: 'index method' })
+  const users = await User.find()
+
+  return res.json({ message: 'index method', users })
 }
 const show = async (req, res) => {
   return res.json({ message: 'show method' })
 }
 const store = async (req, res) => {
-  const body = req.body
-  return res.json({ message: 'store method', body })
+  const { name, age } = req.body
+
+  const user = await User.findOne({ name })
+
+  if (user) {
+    return res.status(400).json({ message: 'User already exists' })
+  }
+
+  const newUser = await User.create({
+    name,
+    age,
+  })
+
+  return res.json({ message: 'store method', newUser })
 }
 const update = async (req, res) => {
   return res.json({ message: 'update method' })

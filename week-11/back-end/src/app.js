@@ -3,6 +3,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 
 import routes from './routes'
+import './database/index'
 
 const app = express()
 app.use(cors())
