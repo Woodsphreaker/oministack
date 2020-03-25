@@ -1,5 +1,7 @@
+// database connection
 import db from '../../database/knexConnection'
 
+// Utils
 import generateHash from '../../utils/generateHash'
 
 const index = async (req, res) => {
@@ -9,8 +11,6 @@ const index = async (req, res) => {
 }
 const show = async (req, res) => {
   const { id } = req.params
-  console.log(id)
-
   const ong = await db('ongs').first().where({ id })
 
   if (!ong) {

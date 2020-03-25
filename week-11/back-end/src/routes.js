@@ -1,14 +1,33 @@
 import { Router } from 'express'
 
 // Controllers
-import OngController from './app/controllers/ongController'
+import OngController from './app/controllers/OngController'
+import IncidentController from './app/controllers/IncidentController'
+import ProfileController from './app/controllers/ProfileController'
+import SessionController from './app/controllers/SessionControler'
 
 const router = Router()
 
-router.get('/', OngController.index)
-router.get('/:id', OngController.show)
-router.post('/', OngController.store)
-router.put('/:id', OngController.update)
-router.delete('/:id', OngController.destroy)
+// Routes
+
+// Session
+router.post('/session', SessionController.show)
+
+// Ong
+router.get('/ong', OngController.index)
+router.get('/ong/:id', OngController.show)
+router.post('/ong', OngController.store)
+router.put('/ong/:id', OngController.update)
+router.delete('/ong/:id', OngController.destroy)
+
+// Incident
+router.get('/incident', IncidentController.index)
+router.get('/incident/:id', IncidentController.show)
+router.post('/incident', IncidentController.store)
+router.put('/incident/:id', IncidentController.update)
+router.delete('/incident/:id', IncidentController.destroy)
+
+// Profiles Incidents
+router.get('/profile', ProfileController.index)
 
 export default router
