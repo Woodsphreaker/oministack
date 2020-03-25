@@ -7,7 +7,15 @@ const index = async (req, res) => {
   try {
     const [{ 'count(*)': count }] = await db('incidents').count()
     const incidents = await db('incidents')
-      .select()
+      .select([
+        'incidents.*',
+        'ongs.name',
+        'ongs.email',
+        'ongs.whatsapp',
+        'ongs.city',
+        'ongs.uf',
+      ])
+      .innerJoin('ongs', 'ongs.id', '=', 'incidents.ong_id')
       .limit(5)
       .offset((page - 1) * 5)
 
