@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 // Pages
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Profile from './pages/Profile'
 
 const Routes = () => {
   return (
@@ -11,6 +12,7 @@ const Routes = () => {
       <Switch>
         <Route path="/" exact component={Login} />
         <Route path="/register" exact component={Register} />
+        <Route path="/profile" exact component={Profile} />
         <Route path="*" render={() => '404 not found'} />
       </Switch>
     </Router>
