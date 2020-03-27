@@ -2,16 +2,15 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 // Pages
-import Home from './pages/Home'
-import Users from './pages/Users'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 const Routes = () => {
   return (
     <Router>
       <Switch>
-        <Route path="/" exact render={() => <Home />} />
-        <Route path="/dash" exact render={() => <div>Dash</div>} />
-        <Route path="/users" exact component={Users} />
+        <Route path="/" exact component={Login} />
+        <Route path="/register" exact component={Register} />
         <Route path="*" render={() => '404 not found'} />
       </Switch>
     </Router>
