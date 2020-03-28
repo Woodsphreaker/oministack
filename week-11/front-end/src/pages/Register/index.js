@@ -1,5 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+
+// Api
+import api from '../../services/api'
 
 // Styled Components
 import {
@@ -18,6 +21,35 @@ import { FiArrowLeft } from 'react-icons/fi'
 import logoImg from '../../assets/images/logo.svg'
 
 const Register = () => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [whatsapp, setWhatsapp] = useState('')
+  const [city, setCity] = useState('')
+  const [uf, setUf] = useState('')
+
+  const history = useHistory()
+  const handleSubmit = async (ev) => {
+    ev.preventDefault()
+
+    const data = {
+      name,
+      email,
+      whatsapp,
+      city,
+      uf,
+    }
+
+    try {
+      const {
+        data: { id },
+      } = await api.post('/ong', data)
+      console.log({ id })
+      history.push('/')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <Container>
@@ -36,13 +68,39 @@ const Register = () => {
             </Link>
           </SectionDescription>
           <SectionForm>
-            <form>
-              <Input type="text" placeholder="Nome da Ong" />
-              <Input type="email" placeholder="E-mail" />
-              <Input type="text" placeholder="WhatsApp" />
+            <form onSubmit={handleSubmit}>
+              <Input
+                value={name}
+                onChange={(ev) => setName(ev.target.value)}
+                type="text"
+                placeholder="Nome da Ong"
+              />
+              <Input
+                onChange={(ev) => setEmail(ev.target.value)}
+                value={email}
+                type="email"
+                placeholder="E-mail"
+              />
+              <Input
+                onChange={(ev) => setWhatsapp(ev.target.value)}
+                value={whatsapp}
+                type="text"
+                placeholder="WhatsApp"
+              />
               <div>
-                <Input type="text" placeholder="Cidade" />
-                <Input type="text" placeholder="UF" width="80px" />
+                <Input
+                  onChange={(ev) => setCity(ev.target.value)}
+                  value={city}
+                  type="text"
+                  placeholder="Cidade"
+                />
+                <Input
+                  value={uf}
+                  onChange={(ev) => setUf(ev.target.value)}
+                  type="text"
+                  placeholder="UF"
+                  width="80px"
+                />
               </div>
 
               <button>Cadastrar</button>
