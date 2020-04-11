@@ -1,15 +1,29 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
+import PropTypes from 'prop-types'
 
-const Home = () => {
+import { Container } from './styles'
 
+const Home = ({ navigation }) => {
   return (
     <>
-      <View>
+      <Container>
         <Text>Home</Text>
-      </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Page2', { Param: 123 })}>
+          <Text>Page 2</Text>
+        </TouchableOpacity>
+      </Container>
     </>
   )
+}
+
+Home.propTypes = {
+  navigation: PropTypes.func,
+}
+
+Home.defaultProps = {
+  navigation: {},
 }
 
 export default Home

@@ -1,12 +1,16 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React from 'react'
+import { View, Text } from 'react-native'
 
-const Page2 = () => (
-  <>
-    <View>
-      <Text>Page2</Text>
-    </View>
-  </>
-);
+const Page2 = ({ navigation }) => {
+  console.log(navigation.getParam('Param'))
+  return (
+    <>
+      <View>
+        <Text>Page2</Text>
+        <Text>{navigation.getParam('Param')}</Text>
+      </View>
+    </>
+  )
+}
 
-export default Page2;
+export default Page2
