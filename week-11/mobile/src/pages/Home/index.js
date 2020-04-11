@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 
 import { Container } from './styles'
@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
 }
 
 Home.propTypes = {
-  navigation: PropTypes.func,
+  navigation: PropTypes.object,
 }
 
 Home.defaultProps = {

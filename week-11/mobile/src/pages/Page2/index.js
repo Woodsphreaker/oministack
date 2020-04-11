@@ -1,13 +1,17 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 
-const Page2 = ({ navigation }) => {
-  console.log(navigation.getParam('Param'))
+const Page2 = ({ route, navigation }) => {
+  const { Param = 'None' } = route.params || {}
+
   return (
     <>
       <View>
         <Text>Page2</Text>
-        <Text>{navigation.getParam('Param')}</Text>
+        <Text>{console.tron.log(Param)}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Text>Go Back</Text>
+        </TouchableOpacity>
       </View>
     </>
   )
