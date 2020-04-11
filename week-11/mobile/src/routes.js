@@ -17,6 +17,13 @@ const Routes = createAppContainer(
     },
     {
       initialRouteName: 'Home',
+      defaultNavigationOptions: {
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#7159c1',
+        },
+        headerTintColor: '#fff',
+      },
     }
   )
 )
