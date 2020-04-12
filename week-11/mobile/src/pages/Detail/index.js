@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import * as MailComposer from 'expo-mail-composer'
 import { Linking } from 'react-native'
 import { Feather } from '@expo/vector-icons'
+import formatPrice from '../../utils/formatPrice'
 import api from '../../services/api'
 
 import LogoImage from '../../assets/img/logo.png'
@@ -26,17 +27,26 @@ import {
   ActionButtonText,
 } from './styles'
 
-const message =
-  'Olá APAD, estou entrando em contato pois gostaria de entrar em contato para ajudar no caso xxx no valor de R$ 00,00'
+const formatMessage = (data) => {
+  const { name: organization, title: incident, value } = data
+  const message = `Olá ${organization}, estou entrando em contato pois gostaria de ajudar no caso ${incident}, no valor de ${formatPrice(
+    value
+  )}`
+  return message
+}
 
 const IncidentDetail = ({ route, navigation }) => {
   const [incident, setIncident] = useState({})
 
   const getIncident = async () => {
-    const { data } = await api.get()
+    const { id } = route.params
+    const { data } = await api.get(`detail?id=${id}`)
+    setIncident(data)
   }
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    getIncident()
+  }, [])
 
   const handleClick = () => {
     navigation.goBack()
@@ -44,15 +54,18 @@ const IncidentDetail = ({ route, navigation }) => {
 
   const senMail = () => {
     // Send email using a internal email client
+    const { email, title } = incident
     MailComposer.composeAsync({
-      subject: 'Herói do caso xxx',
-      recipients: ['teste@teste.com'],
-      body: message,
+      subject: `Herói do caso g${title}`,
+      recipients: [email],
+      body: formatMessage(incident),
     })
   }
 
   const sendWhatsApp = () => {
-    Linking.openURL(`whatsapp://send?phone=5511971431714&text=${message}`)
+    Linking.openURL(
+      `whatsapp://send?phone=5511971431714&text=${formatMessage(incident)}`
+    )
   }
 
   return (
@@ -70,21 +83,28 @@ const IncidentDetail = ({ route, navigation }) => {
             <Property>
               <TextBold>ONG:</TextBold>
             </Property>
-            <Value>APAD</Value>
+            <Value>{incident.name}</Value>
           </ItemContainer>
 
           <ItemContainer>
             <Property>
               <TextBold>CASO: </TextBold>
             </Property>
-            <Value>Cadelinha Atropelada</Value>
+            <Value>{incident.title}</Value>
+          </ItemContainer>
+
+          <ItemContainer>
+            <Property>
+              <TextBold>DESCRIÇÃO: </TextBold>
+            </Property>
+            <Value>{incident.description}</Value>
           </ItemContainer>
 
           <ItemContainer>
             <Property>
               <TextBold>VALOR:</TextBold>
             </Property>
-            <Value>R$ 120,00</Value>
+            <Value>{formatPrice(incident.value)}</Value>
           </ItemContainer>
         </Item>
       </ItemBox>
@@ -118,11 +138,13 @@ const IncidentDetail = ({ route, navigation }) => {
 }
 
 IncidentDetail.propTypes = {
-  navigation: PropTypes.object,
+  navigation: PropTypes.func,
+  route: PropTypes.func,
 }
 
 IncidentDetail.defaultProps = {
   navigation: {},
+  route: '',
 }
 
 export default IncidentDetail
