@@ -12,10 +12,10 @@ const Stack = createStackNavigator()
 const Routes = () => (
   <NavigationContainer>
     <Stack.Navigator
-      initialRouteName="Incidents"
+      initialRouteName="incidents"
       screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="Incidents"
+        name="incidents"
         component={Incidents}
         options={{
           title: 'Incidents Screen',
@@ -25,7 +25,17 @@ const Routes = () => (
           },
         }}
       />
-      <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen
+        name="detail"
+        options={{
+          title: 'Incidents Details',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#ccc',
+          },
+        }}
+        component={Detail}
+      />
     </Stack.Navigator>
   </NavigationContainer>
 )

@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 // import { View, Text, TouchableOpacity } from 'react-native'
 
@@ -20,7 +21,15 @@ import {
   DetailsButtonText,
 } from './styles'
 
-const Incidents = ({ route, navigation }) => {
+const Incidents = ({ route }) => {
+  const [incidents, setIncidents] = useState([...Array(10)])
+
+  const navigation = useNavigation()
+
+  const handleClick = (item) => {
+    navigation.navigate('detail')
+  }
+
   return (
     <Container>
       <Header>
@@ -36,9 +45,11 @@ const Incidents = ({ route, navigation }) => {
       </Title>
       <Description>Escolha um dos casos e salve o dia !</Description>
 
-      <IncidentsList>
-        {[...Array(10)].map((el) => (
-          <IncidentItem key={`${el}`}>
+      <IncidentsList
+        data={incidents}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <IncidentItem>
             <IncidentProperty>
               <TextBold>ONG:</TextBold>
             </IncidentProperty>
@@ -54,15 +65,16 @@ const Incidents = ({ route, navigation }) => {
             </IncidentProperty>
             <IncidentValue>R$ 120,00</IncidentValue>
 
-            <DetailsButton onPress={() => alert('ok')}>
+            <DetailsButton onPress={handleClick}>
               <DetailsButtonText>
                 <TextBold>Ver mais detalhes</TextBold>
               </DetailsButtonText>
               <Feather name="arrow-right" size={16} color="#E02041" />
             </DetailsButton>
           </IncidentItem>
-        ))}
-      </IncidentsList>
+        )}
+        keyExtractor={(item) => item}
+      />
     </Container>
   )
 }

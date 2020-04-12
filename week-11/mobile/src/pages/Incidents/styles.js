@@ -1,9 +1,10 @@
 import styled from 'styled-components/native'
+import { FlatList } from 'react-native'
 import Constants from 'expo-constants'
 
 const Container = styled.View`
   flex: 1;
-  padding: ${Constants.statusBarHeight + 20}px 24px 0 24px;
+  padding: ${Constants.statusBarHeight + 20}px 10px 0 10px;
   background: #eee;
 `
 const Header = styled.View`
@@ -24,7 +25,7 @@ const HeaderContent = styled.Text`
 
 const Title = styled.Text`
   font-size: 30px;
-  margin: 48px 0 16px;
+  margin: 30px 0 16px;
   color: #13131a;
 `
 
@@ -37,7 +38,7 @@ const Description = styled.Text`
 const TextBold = styled.Text`
   font-weight: bold;
 `
-const IncidentsList = styled.View`
+const IncidentsList = styled(FlatList)`
   margin-top: 32px;
 `
 
