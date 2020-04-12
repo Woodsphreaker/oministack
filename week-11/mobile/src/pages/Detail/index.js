@@ -1,20 +1,21 @@
 import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 
-import { Container } from './styles'
+import LogoImage from '../../assets/img/logo.png'
+
+import { Container, Logo, Header, HeaderContent, TextBold } from './styles'
 
 const Detail = ({ navigation }) => {
   return (
-    <>
-      <Container>
-        <Text>Detail</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Incidents', { Param: 123 })}>
-          <Text>Page 2</Text>
-        </TouchableOpacity>
-      </Container>
-    </>
+    <Container>
+      <Header>
+        <Logo source={LogoImage} />
+        <HeaderContent>
+          Total de
+          <TextBold> 0 casos</TextBold>
+        </HeaderContent>
+      </Header>
+    </Container>
   )
 }
 
