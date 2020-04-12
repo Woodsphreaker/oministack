@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import * as MailComposer from 'expo-mail-composer'
+import { Linking } from 'react-native'
 import { Feather } from '@expo/vector-icons'
+import api from '../../services/api'
 
 import LogoImage from '../../assets/img/logo.png'
 
@@ -23,9 +26,33 @@ import {
   ActionButtonText,
 } from './styles'
 
-const Detail = ({ navigation }) => {
+const message =
+  'Olá APAD, estou entrando em contato pois gostaria de entrar em contato para ajudar no caso xxx no valor de R$ 00,00'
+
+const IncidentDetail = ({ route, navigation }) => {
+  const [incident, setIncident] = useState({})
+
+  const getIncident = async () => {
+    const { data } = await api.get()
+  }
+
+  useEffect(() => {}, [])
+
   const handleClick = () => {
     navigation.goBack()
+  }
+
+  const senMail = () => {
+    // Send email using a internal email client
+    MailComposer.composeAsync({
+      subject: 'Herói do caso xxx',
+      recipients: ['teste@teste.com'],
+      body: message,
+    })
+  }
+
+  const sendWhatsApp = () => {
+    Linking.openURL(`whatsapp://send?phone=5511971431714&text=${message}`)
   }
 
   return (
@@ -73,12 +100,12 @@ const Detail = ({ navigation }) => {
           <HeroDescription>Entre em contato</HeroDescription>
 
           <ActionContainer>
-            <ActionButton onPress={() => {}}>
+            <ActionButton onPress={() => sendWhatsApp()}>
               <ActionButtonText>
                 <TextBold>WhatsApp</TextBold>
               </ActionButtonText>
             </ActionButton>
-            <ActionButton onPress={() => {}}>
+            <ActionButton onPress={() => senMail()}>
               <ActionButtonText>
                 <TextBold>E-mail</TextBold>
               </ActionButtonText>
@@ -90,12 +117,12 @@ const Detail = ({ navigation }) => {
   )
 }
 
-Detail.propTypes = {
+IncidentDetail.propTypes = {
   navigation: PropTypes.object,
 }
 
-Detail.defaultProps = {
+IncidentDetail.defaultProps = {
   navigation: {},
 }
 
-export default Detail
+export default IncidentDetail

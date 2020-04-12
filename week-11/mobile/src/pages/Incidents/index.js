@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
+import formatPrice from '../../utils/formatPrice'
+import api from '../../services/api'
 // import { View, Text, TouchableOpacity } from 'react-native'
 
 import LogoImage from '../../assets/img/logo.png'
@@ -22,12 +24,33 @@ import {
 } from './styles'
 
 const Incidents = ({ route }) => {
-  const [incidents, setIncidents] = useState([...Array(10)])
-
   const navigation = useNavigation()
 
-  const handleClick = (item) => {
-    navigation.navigate('detail')
+  const [incidents, setIncidents] = useState()
+
+  const prepareData = (data = []) => {
+    if (!data.length) {
+      return false
+    }
+
+    const newData = data.map((el) => ({
+      ...el,
+      value: formatPrice(el.value),
+    }))
+    return setIncidents(newData)
+  }
+
+  const getIncidents = async () => {
+    const { data } = await api.get('incident')
+    prepareData(data)
+  }
+
+  useEffect(() => {
+    getIncidents()
+  }, [])
+
+  const handleClick = (id) => {
+    navigation.navigate('detail', { id })
   }
 
   return (
@@ -48,24 +71,25 @@ const Incidents = ({ route }) => {
       <IncidentsList
         data={incidents}
         showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <IncidentItem>
             <IncidentProperty>
               <TextBold>ONG:</TextBold>
             </IncidentProperty>
-            <IncidentValue>APAD</IncidentValue>
+            <IncidentValue>{item.name}</IncidentValue>
 
             <IncidentProperty>
               <TextBold>CASO: </TextBold>
             </IncidentProperty>
-            <IncidentValue>Cadelinha Atropelada</IncidentValue>
+            <IncidentValue>{item.title}</IncidentValue>
 
             <IncidentProperty>
               <TextBold>VALOR:</TextBold>
             </IncidentProperty>
-            <IncidentValue>R$ 120,00</IncidentValue>
+            <IncidentValue>{item.value}</IncidentValue>
 
-            <DetailsButton onPress={handleClick}>
+            <DetailsButton onPress={() => handleClick(item.id)}>
               <DetailsButtonText>
                 <TextBold>Ver mais detalhes</TextBold>
               </DetailsButtonText>
@@ -73,7 +97,6 @@ const Incidents = ({ route }) => {
             </DetailsButton>
           </IncidentItem>
         )}
-        keyExtractor={(item) => item}
       />
     </Container>
   )
