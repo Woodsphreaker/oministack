@@ -4,26 +4,28 @@ import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import Home from './pages/Home'
-import Page2 from './pages/Page2'
+import Incidents from './pages/Incidents'
+import Detail from './pages/Detail'
 
 const Stack = createStackNavigator()
 
 const Routes = () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator
+      initialRouteName="Incidents"
+      screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Incidents"
+        component={Incidents}
         options={{
-          title: 'Home Screen',
+          title: 'Incidents Screen',
           headerTitleAlign: 'center',
           headerStyle: {
             backgroundColor: '#ccc',
           },
         }}
       />
-      <Stack.Screen name="Page2" component={Page2} />
+      <Stack.Screen name="Detail" component={Detail} />
     </Stack.Navigator>
   </NavigationContainer>
 )
@@ -35,21 +37,21 @@ export default Routes
 // import { createStackNavigator } from 'react-navigation-stack'
 
 // // Pages
-// import Home from './pages/Home'
-// import Page2 from './pages/Page2'
+// import Incidents from './pages/Incidents'
+// import Detail from './pages/Detail'
 
 // const Routes = createAppContainer(
 //   createStackNavigator(
 //     {
-//       Home: {
-//         screen: Home,
+//       Incidents: {
+//         screen: Incidents,
 //       },
-//       Page2: {
-//         screen: Page2,
+//       Detail: {
+//         screen: Detail,
 //       },
 //     },
 //     {
-//       initialRouteName: 'Home',
+//       initialRouteName: 'Incidents',
 //       defaultNavigationOptions: {
 //         headerTitleAlign: 'center',
 //         headerStyle: {

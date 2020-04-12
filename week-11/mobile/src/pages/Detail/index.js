@@ -4,13 +4,13 @@ import PropTypes from 'prop-types'
 
 import { Container } from './styles'
 
-const Home = ({ navigation }) => {
+const Detail = ({ navigation }) => {
   return (
     <>
       <Container>
-        <Text>Home</Text>
+        <Text>Detail</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Page2', { Param: 123 })}>
+          onPress={() => navigation.navigate('Incidents', { Param: 123 })}>
           <Text>Page 2</Text>
         </TouchableOpacity>
       </Container>
@@ -18,12 +18,12 @@ const Home = ({ navigation }) => {
   )
 }
 
-Home.propTypes = {
+Detail.propTypes = {
   navigation: PropTypes.object,
 }
 
-Home.defaultProps = {
+Detail.defaultProps = {
   navigation: {},
 }
 
-export default Home
+export default Detail
