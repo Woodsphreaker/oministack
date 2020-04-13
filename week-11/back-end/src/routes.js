@@ -35,7 +35,15 @@ router.put('/ong/:id', OngController.update)
 router.delete('/ong/:id', OngController.destroy)
 
 // Incident
-router.get('/incident', IncidentController.index)
+router.get(
+  '/incident',
+  celebrate({
+    [Segments.QUERY]: Joi.object().keys({
+      page: Joi.number(),
+    }),
+  }),
+  IncidentController.index
+)
 router.get('/incident/:id', IncidentController.show)
 router.post('/incident', IncidentController.store)
 router.put('/incident/:id', IncidentController.update)
