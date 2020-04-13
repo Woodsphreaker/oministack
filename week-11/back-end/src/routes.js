@@ -5,6 +5,7 @@ import OngController from './app/controllers/OngController'
 import IncidentController from './app/controllers/IncidentController'
 import ProfileController from './app/controllers/ProfileController'
 import SessionController from './app/controllers/SessionControler'
+import DetailController from './app/controllers/DetailController'
 
 const router = Router()
 
@@ -29,5 +30,8 @@ router.delete('/incident/:id', IncidentController.destroy)
 
 // Profiles Incidents
 router.get('/profile', ProfileController.index)
+
+// Detail Controller
+router.get('/detail', DetailController.show)
 
 export default router
