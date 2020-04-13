@@ -42,7 +42,15 @@ router.put('/incident/:id', IncidentController.update)
 router.delete('/incident/:id', IncidentController.destroy)
 
 // Profiles Incidents
-router.get('/profile', ProfileController.index)
+router.get(
+  '/profile',
+  celebrate({
+    [Segments.HEADERS]: Joi.object({
+      authorization: Joi.string().required(),
+    }).unknown(),
+  }),
+  ProfileController.index
+)
 
 // Detail Controller
 router.get('/detail', DetailController.show)
