@@ -63,8 +63,9 @@ const IncidentDetail = ({ route, navigation }) => {
   }
 
   const sendWhatsApp = () => {
+    const { whatsapp } = incident
     Linking.openURL(
-      `whatsapp://send?phone=5511971431714&text=${formatMessage(incident)}`
+      `whatsapp://send?phone=${whatsapp}&text=${formatMessage(incident)}`
     )
   }
 

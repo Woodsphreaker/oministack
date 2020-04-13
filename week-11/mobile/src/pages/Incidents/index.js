@@ -28,6 +28,7 @@ const Incidents = () => {
   const navigation = useNavigation()
   const [incidents, setIncidents] = useState([])
   const [refreshing, setRefreshing] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
 
@@ -40,20 +41,22 @@ const Incidents = () => {
       ...el,
       value: formatPrice(el.value),
     }))
+    setRefreshing(false)
+    setLoading(false)
     return setIncidents(page === 1 ? newData : [...incidents, ...newData])
   }
 
   const getIncidents = async () => {
+    setLoading(true)
     const response = await api.get(`incident?page=${page}`)
     const { data } = response
     const { 'x-total-count': totalCount = 0 } = response.headers
     setTotal(totalCount)
-    setRefreshing(false)
     prepareData(data)
   }
 
   useEffect(() => {
-    getIncidents()
+    getIncidents(page)
   }, [page])
 
   const handleClick = (id) => {
@@ -61,13 +64,24 @@ const Incidents = () => {
   }
 
   const loadMore = () => {
-    setRefreshing(true)
-    setPage(page + 1)
+    if (loading) {
+      return false
+    }
+
+    if (Number(total) === incidents.length) {
+      return false
+    }
+
+    return setPage(page + 1)
   }
 
   const refreshList = () => {
+    if (page === 1) {
+      return false
+    }
+
     setRefreshing(true)
-    setPage(1)
+    return setPage(1)
   }
 
   return (
@@ -87,7 +101,8 @@ const Incidents = () => {
 
       <IncidentsList
         data={incidents}
-        showsVerticalScrollIndicator={false}
+        extraData={incidents}
+        showsVerticalScrollIndicator
         keyExtractor={(item) => String(item.id)}
         onEndReached={loadMore}
         onEndReachedThreshold={0.2}
