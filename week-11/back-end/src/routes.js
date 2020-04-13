@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { celebrate, Joi, Segments } from 'celebrate'
 
 // Controllers
 import OngController from './app/controllers/OngController'
@@ -17,7 +18,19 @@ router.post('/session', SessionController.show)
 // Ong
 router.get('/ong', OngController.index)
 router.get('/ong/:id', OngController.show)
-router.post('/ong', OngController.store)
+router.post(
+  '/ong',
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      whatsapp: Joi.number().required(),
+      city: Joi.string().min(2).required(),
+      uf: Joi.string().min(2).required(),
+    }),
+  }),
+  OngController.store
+)
 router.put('/ong/:id', OngController.update)
 router.delete('/ong/:id', OngController.destroy)
 
